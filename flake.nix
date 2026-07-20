@@ -68,9 +68,11 @@
       {
         formatter.${system} = pkgs.alejandra;
         nixosConfigurations = {
-          h-laptop = import ./hosts/laptop/flake.nix args;
-          h-work = import ./hosts/work/flake.nix args;
-          jack = import ./hosts/server/flake.nix args;
+          #h-laptop = import ./hosts/laptop/flake.nix args;
+          #h-work = import ./hosts/work/flake.nix args;
+          #jack = import ./hosts/server/flake.nix args;
+
+          bmo = import ./hosts/bmo/flake.nix args;
         };
       }
     ];

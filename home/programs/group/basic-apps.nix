@@ -41,5 +41,10 @@
     pastel # Command-line tool to generate, analyze, convert and manipulate colors
     imagemagick # Image manipulation tool
     chafa # Image to ANSI/Unicode converter and more.
+
+    prismlauncher
+    firefox
+    steam
+    discord
   ];
 }
