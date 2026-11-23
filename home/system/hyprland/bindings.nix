@@ -126,6 +126,7 @@ in {
         "$mod, RETURN, exec, uwsm app -- ${pkgs.ghostty}/bin/ghostty"
         "$mod, E, exec, uwsm app -- ${pkgs.thunar}/bin/thunar"
         "$mod, SPACE, exec, fuzzel"
+        "$mod, D, exec, swaync-client -t"
         "$mod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
 
         # Windows

@@ -54,12 +54,12 @@
 
     fonts = {
       monospace = {
-        package = pkgs.maple-mono.NF;
-        name = "Maple Mono NF";
+        package = pkgs.monocraft;
+        name = "Monocraft";
       };
       sansSerif = {
-        package = pkgs.source-sans-pro;
-        name = "Source Sans Pro";
+        package = pkgs.monocraft;
+        name = "Monocraft";
       };
       serif = config.stylix.fonts.sansSerif;
       emoji = {

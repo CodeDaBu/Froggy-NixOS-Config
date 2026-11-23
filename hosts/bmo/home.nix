@@ -26,7 +26,7 @@
     # System (Desktop environment like stuff)
     ../../home/system/hyprland
     ../../home/system/waybar
-    ../../home/system/mako
+    ../../home/system/swaync
     ../../home/system/fuzzel
     ../../home/system/hyprpaper
     ../../home/system/mime
