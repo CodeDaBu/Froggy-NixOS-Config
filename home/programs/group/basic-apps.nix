@@ -41,17 +41,5 @@
     pastel # Command-line tool to generate, analyze, convert and manipulate colors
     imagemagick # Image manipulation tool
     chafa # Image to ANSI/Unicode converter and more.
-
-    prismlauncher
-    firefox
-    discord
-    sourcegit
-    ncdu
-    lutris
-    gnumake
-    zenity
-    flatpak
-    pkgs.android-tools
-    pkgs.pulseaudio
   ];
 }

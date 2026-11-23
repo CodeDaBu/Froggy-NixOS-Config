@@ -18,6 +18,7 @@
     ../../home/programs/yazi
 
     ../../home/programs/group/basic-apps.nix
+    ../../home/programs/group/my-apps.nix
     ../../home/programs/group/cybersecurity.nix
     ../../home/programs/group/dev.nix
     ../../home/programs/group/misc.nix
