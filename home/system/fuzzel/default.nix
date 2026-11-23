@@ -14,7 +14,7 @@
         vertical-pad = 10;
         inner-pad = 6;
         image-size-ratio = 0.4;
-        anchor = "top-center";
+        anchor = "top";
         y-margin = 56;
       };
       colors = {
