@@ -60,7 +60,7 @@ in {
         # sync.enable disabled as offload is generally better for laptops
         sync.enable = false;
         # PCI IDs verified for your hardware
-        amdgpuBusId = "PCI:5:0:0"; # Integrated AMD GPU
+        amdgpuBusId = "PCI:6:0:0"; # Integrated AMD GPU
         nvidiaBusId = "PCI:1:0:0"; # Dedicated Nvidia GPU
       };
     };

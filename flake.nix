@@ -1,9 +1,5 @@
 {
-  # https://github.com/anotherhadi/nixy
-  description = ''
-    Nixy simplifies and unifies the Hyprland ecosystem with a modular, easily customizable setup.
-    It provides a structured way to manage your system configuration and dotfiles with minimal effort.
-  '';
+  description = "BMO NixOS configuration";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -34,12 +30,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Server
-    nixarr.url = "github:rasmus-kirk/nixarr";
-    default-creds.url = "github:anotherhadi/default-creds";
-    blog.url = "github:anotherhadi/blog";
-    awesome-wallpapers.url = "github:anotherhadi/awesome-wallpapers";
-    iknowyou.url = "github:anotherhadi/iknowyou";
   };
 
   outputs = inputs @ {
@@ -68,10 +58,6 @@
       {
         formatter.${system} = pkgs.alejandra;
         nixosConfigurations = {
-          #h-laptop = import ./hosts/laptop/flake.nix args;
-          #h-work = import ./hosts/work/flake.nix args;
-          #jack = import ./hosts/server/flake.nix args;
-
           bmo = import ./hosts/bmo/flake.nix args;
         };
       }
