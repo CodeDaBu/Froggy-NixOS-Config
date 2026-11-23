@@ -114,7 +114,7 @@
     :x "-8px"
     :y "56px"
     :width "360px"
-    :height "calc(100% - 72px)"
+    :height "900px"
     :anchor "top right")
   :stacking "fg"
   :exclusive false

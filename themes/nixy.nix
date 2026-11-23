@@ -26,24 +26,24 @@
     enable = true;
 
     # See https://tinted-theming.github.io/tinted-gallery/ for more schemes
-    # Material You Dark — based on Material Design 3
+    # Material You Dark — Nature Green (matches wallpaper)
     base16Scheme = {
-      base00 = "1C1B1F"; # Surface (background)
-      base01 = "2B2930"; # Surface Variant
-      base02 = "3B383E"; # Surface Container
-      base03 = "605D63"; # Outline
-      base04 = "938F96"; # On Surface Variant
-      base05 = "E6E1E5"; # On Surface (main text)
-      base06 = "FFFBFE"; # Surface Bright
-      base07 = "FFFFFF"; # White
-      base08 = "CF6679"; # Error
-      base09 = "FFB786"; # Tertiary
-      base0A = "D0C048"; # Yellow
-      base0B = "90C978"; # Secondary Green
-      base0C = "78C8C4"; # Teal
-      base0D = "D0BCFF"; # Primary Purple (accent)
-      base0E = "CCC2DC"; # Secondary Purple
-      base0F = "EFB8C8"; # Pink
+      base00 = "0D1B10"; # Background (dark forest)
+      base01 = "1A2B1E"; # Surface Variant
+      base02 = "2A3D2E"; # Surface Container
+      base03 = "4A6B50"; # Outline
+      base04 = "7DAB84"; # On Surface Variant
+      base05 = "C8E6CE"; # On Surface (main text)
+      base06 = "E4F3E8"; # Surface Bright
+      base07 = "F0FBF2"; # Near white
+      base08 = "E05C5C"; # Error
+      base09 = "D4A56A"; # Amber/warm
+      base0A = "C8D44C"; # Yellow-green
+      base0B = "5DC87A"; # Secondary bright green
+      base0C = "4CC5B0"; # Teal
+      base0D = "7ED88A"; # Primary green (accent)
+      base0E = "A8D890"; # Soft green
+      base0F = "D87AB0"; # Pink (flowers)
     };
 
     cursor = {

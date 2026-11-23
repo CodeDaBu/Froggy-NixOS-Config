@@ -67,6 +67,7 @@ in {
     settings = {
       exec-once = [
         "dbus-update-activation-environment --systemd --all &"
+        "eww daemon"
       ];
 
       monitor = [
