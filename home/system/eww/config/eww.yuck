@@ -86,11 +86,11 @@
 
 ; ── Calendar Tab ─────────────────────────────────────────────────────────
 (defwidget cal-tab []
-  (box :visible {active-tab == "cal"} :class "tab-content cal-section" :orientation "v" :spacing 12
-    (box :class "clock-block" :orientation "v" :spacing 2
+  (box :visible {active-tab == "cal"} :class "tab-content cal-section" :orientation "v" :space-evenly false :spacing 10
+    (box :class "clock-block" :orientation "v" :space-evenly false :spacing 0
       (label :class "clock" :halign "start" :text clock-time)
       (label :class "date"  :halign "start" :text clock-date))
-    (calendar :class "cal"
+    (calendar :class "cal" :hexpand true
       :show-day-names true
       :show-heading true
       :show-week-numbers false)))

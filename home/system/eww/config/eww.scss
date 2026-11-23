@@ -149,7 +149,7 @@ $error:    #E05C5C;
 
 // ── Calendar ──────────────────────────────────────────────────────────
 .clock-block {
-  margin-bottom: 4px;
+  margin-bottom: 0;
 }
 
 .clock {
@@ -168,6 +168,8 @@ calendar {
   color: $text;
   background: transparent;
   border-radius: 0;
+  font-size: 19px;
+  padding: 6px 8px;
 
   &:selected {
     background: $primary;
@@ -178,7 +180,7 @@ calendar {
   &.header {
     color: $text;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 18px;
   }
 
   &.button,
