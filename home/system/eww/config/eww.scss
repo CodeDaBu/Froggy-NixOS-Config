@@ -1,0 +1,198 @@
+// Material You Dark — matches themes/nixy.nix palette
+$bg:       #1C1B1F;
+$surface:  #2B2930;
+$surface2: #3B383E;
+$outline:  #605D63;
+$muted:    #938F96;
+$text:     #E6E1E5;
+$primary:  #D0BCFF;
+$green:    #90C978;
+$teal:     #78C8C4;
+$orange:   #FFB786;
+$error:    #CF6679;
+
+* {
+  font-family: "Monocraft", monospace;
+  font-size: 13px;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard {
+  background: $bg;
+  border-left: 1px solid $surface2;
+  min-width: 360px;
+}
+
+.section {
+  padding: 16px;
+  border-bottom: 1px solid $surface;
+}
+
+// ── Header ──────────────────────────────────────────────────────────────
+.header-section {
+  padding: 20px 16px 16px;
+  background: $surface;
+}
+
+.clock {
+  font-size: 40px;
+  font-weight: bold;
+  color: $text;
+  letter-spacing: 2px;
+}
+
+.date {
+  font-size: 12px;
+  color: $muted;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+// ── Section titles ────────────────────────────────────────────────────
+.section-title {
+  font-size: 11px;
+  color: $outline;
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+}
+
+// ── Music ─────────────────────────────────────────────────────────────
+.music-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: $text;
+}
+
+.music-artist {
+  font-size: 12px;
+  color: $primary;
+}
+
+.music-album {
+  font-size: 11px;
+  color: $muted;
+}
+
+.controls {
+  margin-top: 4px;
+}
+
+.ctrl-btn {
+  background: $surface;
+  color: $primary;
+  border: 1px solid $surface2;
+  padding: 6px 12px;
+  font-size: 16px;
+  min-width: 36px;
+
+  &:hover {
+    background: $surface2;
+  }
+}
+
+.ctrl-btn.play {
+  background: $primary;
+  color: $bg;
+  border: none;
+  padding: 6px 16px;
+
+  &:hover {
+    background: lighten($primary, 10%);
+  }
+}
+
+// ── Calendar ──────────────────────────────────────────────────────────
+.cal-section {
+  padding: 16px 12px;
+}
+
+calendar {
+  color: $text;
+  background: transparent;
+  border-radius: 0;
+
+  &:selected {
+    background: $primary;
+    color: $bg;
+    border-radius: 0;
+  }
+
+  &.header {
+    color: $text;
+    font-weight: bold;
+    font-size: 12px;
+  }
+
+  &.button,
+  &.arrow {
+    color: $primary;
+
+    &:hover {
+      background: $surface;
+    }
+  }
+
+  &.highlight {
+    color: $primary;
+    font-weight: bold;
+  }
+
+  &:indeterminate {
+    color: $outline;
+  }
+}
+
+// ── System stats ──────────────────────────────────────────────────────
+.stats-section {
+  padding-bottom: 24px;
+}
+
+.stat-label {
+  color: $muted;
+  font-size: 12px;
+  min-width: 80px;
+}
+
+.stat-value {
+  color: $text;
+  font-size: 12px;
+}
+
+.stat-bar {
+  min-height: 4px;
+  border-radius: 0;
+}
+
+// GTK progressbar styling
+progressbar {
+  border-radius: 0;
+
+  trough {
+    background: $surface2;
+    border-radius: 0;
+    min-height: 4px;
+  }
+}
+
+.cpu-bar  progressbar progress { background: $primary; border-radius: 0; min-height: 4px; }
+.gpu-bar  progressbar progress { background: $teal;    border-radius: 0; min-height: 4px; }
+.ram-bar  progressbar progress { background: $green;   border-radius: 0; min-height: 4px; }
+.disk-bar progressbar progress { background: $orange;  border-radius: 0; min-height: 4px; }
+
+// Scrollbar
+scrollbar {
+  background: $surface;
+  border-radius: 0;
+}
+
+scrollbar slider {
+  background: $outline;
+  border-radius: 0;
+  min-width: 4px;
+}
+
+scrollbar slider:hover {
+  background: $primary;
+}

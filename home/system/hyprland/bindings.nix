@@ -126,7 +126,7 @@ in {
         "$mod, RETURN, exec, uwsm app -- ${pkgs.ghostty}/bin/ghostty"
         "$mod, E, exec, uwsm app -- ${pkgs.thunar}/bin/thunar"
         "$mod, SPACE, exec, fuzzel"
-        "$mod, D, exec, swaync-client -t"
+        "$mod, D, exec, (eww active-windows | grep -q dashboard && eww close dashboard) || eww open dashboard"
         "$mod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
 
         # Windows

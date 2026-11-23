@@ -75,9 +75,6 @@
     };
 
     polarity = "dark";
-    image = pkgs.fetchurl {
-      url = "https://raw.githubusercontent.com/anotherhadi/awesome-wallpapers/refs/heads/main/app/static/wallpapers/black-moutains-and-a-city.png";
-      sha256 = "sha256-RTTA3Lf+hnPpo9hwS075kbnIouz12ul2GKO3EIgP6AU=";
-    };
+    image = ../wallpapers/nature.jpg;
   };
 }

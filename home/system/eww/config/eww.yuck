@@ -1,0 +1,122 @@
+; ── Polls ──────────────────────────────────────────────────────────────
+(defpoll clock-time :interval "1s"
+  `date "+%H:%M:%S"`)
+
+(defpoll clock-date :interval "60s"
+  `date "+%A, %d %B %Y"`)
+
+(defpoll cpu-usage :interval "2s"
+  `awk 'NR==1{u1=$2+$4;t1=$2+$3+$4+$5+$6+$7+$8} NR==2{u2=$2+$4;t2=$2+$3+$4+$5+$6+$7+$8; printf "%.0f",(u2-u1)/(t2-t1)*100}' <(grep "^cpu " /proc/stat) <(sleep 0.5; grep "^cpu " /proc/stat)`)
+
+(defpoll gpu-usage :interval "3s"
+  `nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null | tr -d ' \n' || echo "0"`)
+
+(defpoll gpu-temp :interval "5s"
+  `nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits 2>/dev/null | tr -d ' \n' || echo "0"`)
+
+(defpoll ram-used :interval "3s"
+  `free -h | awk '/^Mem/{print $3}'`)
+
+(defpoll ram-total :interval "60s"
+  `free -h | awk '/^Mem/{print $2}'`)
+
+(defpoll ram-percent :interval "3s"
+  `free | awk '/^Mem/{printf "%.0f", $3/$2*100}'`)
+
+(defpoll disk-info :interval "30s"
+  `df -h / | awk 'NR==2{print $3"/"$2}'`)
+
+(defpoll disk-percent :interval "30s"
+  `df / | awk 'NR==2{printf "%.0f", $3/$2*100}'`)
+
+(defpoll music-title :interval "2s"
+  `playerctl metadata title 2>/dev/null || echo "Nothing playing"`)
+
+(defpoll music-artist :interval "2s"
+  `playerctl metadata artist 2>/dev/null || echo "—"`)
+
+(defpoll music-album :interval "2s"
+  `playerctl metadata album 2>/dev/null || echo ""`)
+
+(defpoll music-status :interval "2s"
+  `playerctl status 2>/dev/null || echo "Stopped"`)
+
+(defpoll music-player :interval "5s"
+  `playerctl -l 2>/dev/null | head -1 || echo ""`)
+
+; ── Widgets ─────────────────────────────────────────────────────────────
+(defwidget header []
+  (box :class "section header-section" :orientation "v" :spacing 2
+    (label :class "clock" :halign "start" :text clock-time)
+    (label :class "date"  :halign "start" :text clock-date)))
+
+(defwidget music []
+  (box :class "section music-section" :orientation "v" :spacing 10
+    (label :class "section-title" :halign "start" :text "󰎆  NOW PLAYING")
+    (label :class "music-title"  :halign "start" :text music-title  :limit-width 30 :wrap false)
+    (label :class "music-artist" :halign "start" :text music-artist :limit-width 30 :wrap false)
+    (label :class "music-album"  :halign "start" :text music-album  :limit-width 30 :wrap false)
+    (box :class "controls" :halign "start" :spacing 6
+      (button :class "ctrl-btn"      :onclick "playerctl previous"   "󰒮")
+      (button :class "ctrl-btn play" :onclick "playerctl play-pause"
+        {music-status == "Playing" ? "󰏤" : "󰐊"})
+      (button :class "ctrl-btn"      :onclick "playerctl next"       "󰒭")
+      (button :class "ctrl-btn"      :onclick "playerctl stop"       "󰓛"))))
+
+(defwidget cal []
+  (box :class "section cal-section" :orientation "v" :spacing 6
+    (label :class "section-title" :halign "start" :text "󰸗  CALENDAR")
+    (calendar :class "cal"
+      :show-day-names true
+      :show-heading true
+      :show-week-numbers false)))
+
+(defwidget sysinfo []
+  (box :class "section stats-section" :orientation "v" :spacing 12
+    (label :class "section-title" :halign "start" :text "󰊚  SYSTEM")
+
+    (box :class "stat" :orientation "v" :spacing 4
+      (box :orientation "h" :spacing 0
+        (label :class "stat-label" :text "󰻠  CPU")
+        (label :class "stat-value" :halign "end" :hexpand true :text "${cpu-usage}%"))
+      (progress :class "stat-bar cpu-bar" :value cpu-usage :min 0 :max 100))
+
+    (box :class "stat" :orientation "v" :spacing 4
+      (box :orientation "h" :spacing 0
+        (label :class "stat-label" :text "󰢮  GPU")
+        (label :class "stat-value" :halign "end" :hexpand true :text "${gpu-usage}%  ${gpu-temp}°C"))
+      (progress :class "stat-bar gpu-bar" :value gpu-usage :min 0 :max 100))
+
+    (box :class "stat" :orientation "v" :spacing 4
+      (box :orientation "h" :spacing 0
+        (label :class "stat-label" :text "󰍛  RAM")
+        (label :class "stat-value" :halign "end" :hexpand true :text "${ram-used} / ${ram-total}"))
+      (progress :class "stat-bar ram-bar" :value ram-percent :min 0 :max 100))
+
+    (box :class "stat" :orientation "v" :spacing 4
+      (box :orientation "h" :spacing 0
+        (label :class "stat-label" :text "󰋊  SSD")
+        (label :class "stat-value" :halign "end" :hexpand true :text disk-info))
+      (progress :class "stat-bar disk-bar" :value disk-percent :min 0 :max 100))))
+
+(defwidget dashboard []
+  (scroll :vscroll true :hscroll false
+    (box :class "dashboard" :orientation "v" :spacing 0
+      (header)
+      (music)
+      (cal)
+      (sysinfo))))
+
+; ── Window ───────────────────────────────────────────────────────────────
+(defwindow dashboard
+  :monitor 0
+  :geometry (geometry
+    :x "-8px"
+    :y "56px"
+    :width "360px"
+    :height "calc(100% - 72px)"
+    :anchor "top right")
+  :stacking "fg"
+  :exclusive false
+  :focusable true
+  (dashboard))

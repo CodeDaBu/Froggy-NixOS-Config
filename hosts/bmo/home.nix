@@ -28,6 +28,7 @@
     ../../home/system/waybar
     ../../home/system/swaync
     ../../home/system/fuzzel
+    ../../home/system/eww
     ../../home/system/hyprpaper
     ../../home/system/mime
     ../../home/system/udiskie
