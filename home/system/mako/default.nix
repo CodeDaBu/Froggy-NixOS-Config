@@ -1,4 +1,6 @@
 {config, ...}: {
+  stylix.targets.mako.enable = false;
+
   services.mako = {
     enable = true;
     settings = {
