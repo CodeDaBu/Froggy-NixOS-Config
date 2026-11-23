@@ -42,7 +42,14 @@ in {
     dconf
     wayland-utils
     wayland-protocols
+    gpu-screen-recorder
+    wl-clipboard
   ];
+
+  services.cliphist = {
+    enable = true;
+    allowImages = true;
+  };
 
   wayland.windowManager.hyprland = {
     enable = true;

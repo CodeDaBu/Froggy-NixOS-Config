@@ -88,17 +88,16 @@ in {
           ])
         )
 
-        "$mod,B, exec, uwsm app -- ${config.programs.helium.package}/bin/helium" # Browser
+        "$mod, B, exec, uwsm app -- ${config.programs.helium.package}/bin/helium"
 
-        # Power
-        "$mod, X, global, caelestia:session" # Powermenu
+        # Power menu
         (
-          "$shiftMod, X, exec, "
+          "$mod, X, exec, "
           + lib.getExe (mkMenu [
             {
               key = "l";
               desc = "Lock";
-              cmd = "hyprctl dispatch global caelestia:lock";
+              cmd = "hyprlock";
             }
             {
               key = "s";
@@ -116,92 +115,71 @@ in {
               cmd = "systemctl poweroff";
             }
             {
-              key = "n";
-              desc = "Nightshift";
-              cmd = "nightshift-toggle";
-            }
-            {
-              key = "c";
-              desc = "Restart caelestia";
-              cmd = "hyprctl dispatch exec 'caelestia-shell kill | sleep 1 | caelestia-shell'";
+              key = "e";
+              desc = "Logout";
+              cmd = "uwsm stop";
             }
           ])
         )
 
         # Quick launch
-        "$mod,RETURN, exec, uwsm app -- ${pkgs.ghostty}/bin/ghostty" # Ghostty (terminal)
-        "$mod,E, exec,  uwsm app -- ${pkgs.thunar}/bin/thunar" # Thunar
-        "$shiftMod, E, exec, pkill fuzzel || caelestia emoji -p" # Emoji picker
-        "$mod, SPACE, global, caelestia:launcher" # Launcher
-        "$mod, N, exec, caelestia shell drawers toggle sidebar" # Sidebar (Notifications, quick actions)
-        "$mod, D, exec, caelestia shell drawers toggle dashboard" # Dashboard
+        "$mod, RETURN, exec, uwsm app -- ${pkgs.ghostty}/bin/ghostty"
+        "$mod, E, exec, uwsm app -- ${pkgs.thunar}/bin/thunar"
+        "$mod, SPACE, exec, fuzzel"
+        "$mod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
 
         # Windows
-        "$mod,Q, killactive," # Close window
-        "$mod,F, fullscreen" # Toggle Fullscreen
-        "$shiftMod,F, togglefloating," # Toggle Floating
+        "$mod, Q, killactive"
+        "$mod, F, fullscreen"
+        "$shiftMod, F, togglefloating"
 
-        # Focus Windows
-        "$mod,H, movefocus, l" # Move focus left
-        "$mod,J, movefocus, d" # Move focus Down
-        "$mod,K, movefocus, u" # Move focus Up
-        "$mod,L, movefocus, r" # Move focus Right
-        "$shiftMod,H, focusmonitor, -1" # Focus previous monitor
-        "$shiftMod,J, layoutmsg, removemaster" # Remove from master
-        "$shiftMod,K, layoutmsg, addmaster" # Add to master
-        "$shiftMod,L, focusmonitor, 1" # Focus next monitor
+        # Focus
+        "$mod, H, movefocus, l"
+        "$mod, J, movefocus, d"
+        "$mod, K, movefocus, u"
+        "$mod, L, movefocus, r"
+        "$shiftMod, H, focusmonitor, -1"
+        "$shiftMod, J, layoutmsg, removemaster"
+        "$shiftMod, K, layoutmsg, addmaster"
+        "$shiftMod, L, focusmonitor, 1"
 
-        # Utilities
-        "$shiftMod, SPACE, exec, caelestia shell gameMode toggle" # Toggle Focus/Game mode
-        "$shiftMod, S, global, caelestia:screenshotFreeze" # Capture region (freeze)
-        ", Print, global, caelestia:screenshotFreeze" # Capture region (freeze)
-        "$shiftMod+Alt, S, global, caelestia:screenshot" # Capture region
+        # Screenshot
+        "$shiftMod, S, exec, hyprshot -m region -o ~/Pictures/Screenshots"
+        ", Print, exec, hyprshot -m output -o ~/Pictures/Screenshots"
       ]
       ++ (builtins.concatLists (
         builtins.genList (
           i: let
             ws = i + 1;
           in [
-            "$mod,code:1${toString i}, workspace, ${toString ws}"
-            "$mod SHIFT,code:1${toString i}, movetoworkspace, ${toString ws}"
+            "$mod, code:1${toString i}, workspace, ${toString ws}"
+            "$mod SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
           ]
         )
         9
       ));
 
     bindm = [
-      "$mod,mouse:272, movewindow" # Move Window (mouse)
-      "$mod,R, resizewindow" # Resize Window (mouse)
+      "$mod, mouse:272, movewindow"
+      "$mod, R, resizewindow"
     ];
 
     bindl = [
       # Brightness
-      ", XF86MonBrightnessUp, global, caelestia:brightnessUp"
-      ", XF86MonBrightnessDown, global, caelestia:brightnessDown"
+      ", XF86MonBrightnessUp, exec, brightnessctl set 5%+"
+      ", XF86MonBrightnessDown, exec, brightnessctl set 5%-"
 
       # Media
-      ", XF86AudioPlay, global, caelestia:mediaToggle"
-      ", XF86AudioPause, global, caelestia:mediaToggle"
-      ", XF86AudioNext, global, caelestia:mediaNext"
-      ", XF86AudioPrev, global, caelestia:mediaPrev"
-      ", XF86AudioStop, global, caelestia:mediaStop"
+      ", XF86AudioPlay, exec, playerctl play-pause"
+      ", XF86AudioPause, exec, playerctl play-pause"
+      ", XF86AudioNext, exec, playerctl next"
+      ", XF86AudioPrev, exec, playerctl previous"
+      ", XF86AudioStop, exec, playerctl stop"
 
-      # Sound
+      # Volume
       ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
       ", XF86AudioRaiseVolume, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"
       ", XF86AudioLowerVolume, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
-    ];
-
-    bindin = [
-      # Launcher
-      "$mod, mouse:272, global, caelestia:launcherInterrupt"
-      "$mod, mouse:273, global, caelestia:launcherInterrupt"
-      "$mod, mouse:274, global, caelestia:launcherInterrupt"
-      "$mod, mouse:275, global, caelestia:launcherInterrupt"
-      "$mod, mouse:276, global, caelestia:launcherInterrupt"
-      "$mod, mouse:277, global, caelestia:launcherInterrupt"
-      "$mod, mouse_up, global, caelestia:launcherInterrupt"
-      "$mod, mouse_down, global, caelestia:launcherInterrupt"
     ];
   };
 }
