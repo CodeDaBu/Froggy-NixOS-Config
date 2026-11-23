@@ -2,6 +2,7 @@
   programs.eww = {
     enable = true;
     package = pkgs.eww;
-    configDir = ./config;
+    yuckConfig = builtins.readFile ./config/eww.yuck;
+    scssConfig = builtins.readFile ./config/eww.scss;
   };
 }
