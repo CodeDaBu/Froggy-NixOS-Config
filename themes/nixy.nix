@@ -7,8 +7,8 @@
   options.theme = lib.mkOption {
     type = lib.types.attrs;
     default = {
-      rounding = 20;
-      bar-rounding = 20 + 10;
+      rounding = 0;
+      bar-rounding = 0;
       bar-thickness = 0;
       gaps-in = 8;
       gaps-out = 8 * 2;

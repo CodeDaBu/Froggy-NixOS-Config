@@ -24,6 +24,26 @@
     pkgs.writeShellScriptBin "menu" ''
       exec ${lib.getExe pkgs.wlr-which-key} ${configFile}
     '';
+
+  dashboardToggle = pkgs.writeShellScript "dashboard-toggle" ''
+    export PATH=${lib.makeBinPath [pkgs.eww pkgs.hyprland pkgs.jq pkgs.gnugrep]}:$PATH
+    if timeout 2 eww active-windows 2>/dev/null | grep -q '^dashboard'; then
+      timeout 2 eww close dashboard-tabs dashboard || pkill -x eww
+    else
+      screen=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')
+      eww open dashboard-tabs --screen "$screen"
+      eww open dashboard --screen "$screen"
+    fi
+  '';
+
+  dashboardKill = pkgs.writeShellScript "dashboard-kill" ''
+    export PATH=${lib.makeBinPath [pkgs.eww pkgs.hyprland pkgs.procps pkgs.gnugrep pkgs.coreutils]}:$PATH
+    if timeout 2 eww active-windows 2>/dev/null | grep -q '^dashboard'; then
+      timeout 2 eww close dashboard-tabs dashboard || pkill -x eww
+    else
+      hyprctl dispatch killactive
+    fi
+  '';
 in {
   wayland.windowManager.hyprland.settings = {
     "$mod" = "SUPER";
@@ -125,12 +145,12 @@ in {
         # Quick launch
         "$mod, RETURN, exec, uwsm app -- ${pkgs.ghostty}/bin/ghostty"
         "$mod, E, exec, uwsm app -- ${pkgs.thunar}/bin/thunar"
-        "$mod, SPACE, exec, uwsm app -- fuzzel"
-        "$mod, D, exec, eww open dashboard --toggle"
+        "$mod, SPACE, exec, pgrep -x fuzzel && pkill -x fuzzel || uwsm app -- fuzzel"
+        "$mod, D, exec, ${dashboardToggle}"
         "$mod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
 
         # Windows
-        "$mod, Q, killactive"
+        "$mod, Q, exec, ${dashboardKill}"
         "$mod, F, fullscreen"
         "$shiftMod, F, togglefloating"
 
