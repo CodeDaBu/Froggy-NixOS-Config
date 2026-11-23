@@ -1,6 +1,6 @@
 {
   config,
-  pkgs-unstable,
+  pkgs,
   ...
 }: {
   imports = [
@@ -24,7 +24,15 @@
     # You should let those lines as is
     ./hardware-configuration.nix
     ./variables.nix
+
+    ../../nixos/steam.nix
   ];
+
+  environment.systemPackages = [
+    pkgs.claude-code
+  ];
+
+  services.flatpak.enable = true;
 
   # USBGuard:
   # Allow all USB devices until a proper policy is configured.

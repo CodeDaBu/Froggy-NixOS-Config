@@ -44,7 +44,14 @@
 
     prismlauncher
     firefox
-    steam
     discord
+    sourcegit
+    ncdu
+    lutris
+    gnumake
+    zenity
+    flatpak
+    pkgs.android-tools
+    pkgs.pulseaudio
   ];
 }
