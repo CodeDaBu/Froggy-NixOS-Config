@@ -27,13 +27,16 @@
 
   dashboardToggle = pkgs.writeShellScript "dashboard-toggle" ''
     export PATH=${lib.makeBinPath [pkgs.eww pkgs.hyprland pkgs.jq pkgs.gnugrep]}:$PATH
+    export PATH=${lib.makeBinPath [pkgs.coreutils pkgs.procps]}:$PATH
+    screen=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')
+    current=$(hyprctl layers -j | jq -r 'to_entries[] | select([.value.levels[][]? | select(.namespace == "gtk-layer-shell")] | length > 0) | .key' | head -n1)
+
     if timeout 2 eww active-windows 2>/dev/null | grep -q '^dashboard'; then
       timeout 2 eww close dashboard-tabs dashboard || pkill -x eww
-    else
-      screen=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')
-      eww open dashboard-tabs --screen "$screen"
-      eww open dashboard --screen "$screen"
+      [ "$current" = "$screen" ] && exit 0
     fi
+    eww open dashboard-tabs --screen "$screen"
+    eww open dashboard --screen "$screen"
   '';
 
   dashboardKill = pkgs.writeShellScript "dashboard-kill" ''
