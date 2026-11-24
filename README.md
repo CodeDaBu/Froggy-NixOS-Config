@@ -4,6 +4,16 @@ NixOS + Home Manager flake for **bmo** (HP laptop, AMD iGPU + Nvidia dGPU) runni
 **Hyprland** with waybar, swaync, fuzzel and an eww dashboard. Based on
 [nixy](https://github.com/anotherhadi/nixy), trimmed down to a single host.
 
+## Screenshots
+
+![Desktop with the eww dashboard open](screenshots/desktop.png)
+
+The dashboard (`Super + D`) has three tabs:
+
+| Music | Calendar | System |
+| --- | --- | --- |
+| ![Music tab](screenshots/dashboard-music.png) | ![Calendar tab](screenshots/dashboard-calendar.png) | ![System tab](screenshots/dashboard-system.png) |
+
 ## Rebuild
 
 The config lives in `~/.config/nixos` on the laptop.
