@@ -195,7 +195,7 @@ hl.bind(mod .. " + E",           hl.dsp.exec_cmd("uwsm app -- /nix/store/ak2bqb5
 hl.bind(mod .. " + SPACE",       hl.dsp.exec_cmd("pgrep -x fuzzel && pkill -x fuzzel || uwsm app -- fuzzel"))
 hl.bind(mod .. " + D",           hl.dsp.exec_cmd("/nix/store/3lv5y03zjff0ya8manxii70hz2442664-dashboard-toggle"))
 hl.bind(mod .. " + V",           hl.dsp.exec_cmd("cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"))
-hl.bind(mod .. " + Q",           hl.dsp.exec_cmd("/nix/store/yp69hkflcs68f4nafgxqv17xhrpr1xg6-dashboard-kill"))
+hl.bind(mod .. " + Q",           hl.dsp.exec_cmd([[sh -c 'if timeout 2 eww active-windows 2>/dev/null | grep -q "^dashboard"; then timeout 2 eww close dashboard-tabs dashboard || pkill -x eww; else hyprctl dispatch "hl.dsp.window.close()"; fi']]))
 hl.bind(mod .. " + F",           hl.dsp.window.fullscreen())
 hl.bind(shiftMod .. " + F",      hl.dsp.window.float({ action = "toggle" }))
 

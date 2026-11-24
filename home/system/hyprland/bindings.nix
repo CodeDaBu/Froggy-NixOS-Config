@@ -44,7 +44,7 @@
     if timeout 2 eww active-windows 2>/dev/null | grep -q '^dashboard'; then
       timeout 2 eww close dashboard-tabs dashboard || pkill -x eww
     else
-      hyprctl dispatch killactive
+      hyprctl dispatch "hl.dsp.window.close()"
     fi
   '';
 in {
