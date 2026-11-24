@@ -82,7 +82,7 @@
       gcm = "git commit -m";
 
       # NixOS
-      rebuild = "sudo nixos-rebuild switch --flake ${config.var.configDirectory}#${config.var.hostname}";
+      rebuild = "sudo nixos-rebuild switch --flake ${config.var.configDirectory}#bmo";
 
       # Typo
       clera = "clear";

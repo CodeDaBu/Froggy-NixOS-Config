@@ -3,17 +3,10 @@
 {
   pkgs,
   config,
-  lib,
   ...
 }: let
   # Using beta driver for recent GPUs like RTX 4070
   nvidiaDriverChannel = config.boot.kernelPackages.nvidiaPackages.production;
-
-  # Hybrid laptop = an AMD or Intel iGPU next to the Nvidia dGPU. Set config.var.gpu in
-  # hosts/<name>/variables.nix: { nvidiaBusId, amdgpuBusId or intelBusId }. Nvidia-only
-  # desktops leave gpu = {} and get no PRIME setup.
-  gpu = config.var.gpu or {};
-  hybrid = (gpu ? nvidiaBusId) && ((gpu ? amdgpuBusId) || (gpu ? intelBusId));
 in {
   # Video drivers configuration for Xorg and Wayland
   services.xserver.videoDrivers = ["nvidia"]; # Simplified - other modules are loaded automatically
@@ -51,25 +44,25 @@ in {
       nvidiaSettings = true; # Nvidia settings utility
       powerManagement = {
         enable = true; # Power management
-        finegrained = hybrid; # More precise power consumption control (needs PRIME offload)
+        finegrained = true; # More precise power consumption control
       };
       modesetting.enable = true; # Required for Wayland
       package = nvidiaDriverChannel;
       forceFullCompositionPipeline = true; # Prevents screen tearing
 
-      # Hybrid iGPU + Nvidia laptop: render on the iGPU, offload to Nvidia on demand
-      prime = lib.mkIf hybrid ({
-          offload = {
-            enable = true; # Mode optimized for power saving
-            enableOffloadCmd = true; # Allows running applications with dedicated GPU
-          };
-          # sync.enable disabled as offload is generally better for laptops
-          sync.enable = false;
-          # PCI IDs (`lspci | grep -Ei "vga|3d|display"`, hex -> decimal, e.g. 05:00.0 = PCI:5:0:0)
-          nvidiaBusId = gpu.nvidiaBusId;
-        }
-        // lib.optionalAttrs (gpu ? amdgpuBusId) {amdgpuBusId = gpu.amdgpuBusId;}
-        // lib.optionalAttrs (gpu ? intelBusId) {intelBusId = gpu.intelBusId;});
+      # Configuration for hybrid AMD+Nvidia laptop
+      prime = {
+        # Optimized configuration for switchable graphics laptops
+        offload = {
+          enable = true; # Mode optimized for power saving
+          enableOffloadCmd = true; # Allows running applications with dedicated GPU
+        };
+        # sync.enable disabled as offload is generally better for laptops
+        sync.enable = false;
+        # PCI IDs verified for your hardware
+        amdgpuBusId = "PCI:5:0:0"; # Integrated AMD GPU
+        nvidiaBusId = "PCI:1:0:0"; # Dedicated Nvidia GPU
+      };
     };
 
     # Enhanced graphics support

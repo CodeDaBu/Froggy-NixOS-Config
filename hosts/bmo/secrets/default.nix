@@ -57,9 +57,5 @@ in {
     age
   ];
 
-  wayland.windowManager.hyprland.extraConfig = ''
-    hl.on("hyprland.start", function()
-      hl.exec_cmd("systemctl --user start sops-nix")
-    end)
-  '';
+  wayland.windowManager.hyprland.settings.exec-once = ["systemctl --user start sops-nix"];
 }

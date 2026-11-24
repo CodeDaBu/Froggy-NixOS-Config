@@ -11,5 +11,6 @@
     cbonsai
     pipes
     cmatrix
+    fastfetch
   ];
 }

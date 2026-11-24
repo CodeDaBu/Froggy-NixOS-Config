@@ -15,12 +15,6 @@
 
     keyboardLayout = "us";
 
-    # PCI bus IDs for nixos/nvidia.nix (hybrid AMD + Nvidia laptops only)
-    gpu = {
-      amdgpuBusId = "PCI:5:0:0"; # lspci: 05:00.0
-      nvidiaBusId = "PCI:1:0:0"; # lspci: 01:00.0
-    };
-
     timeZone = "Europe/Ljubljana";
     defaultLocale = "en_US.UTF-8";
     extraLocale = "en_US.UTF-8";

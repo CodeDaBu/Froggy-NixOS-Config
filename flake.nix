@@ -49,13 +49,9 @@
       (import ./home/programs/nixy/flake.nix args)
       {
         formatter.${system} = pkgs.alejandra;
-        # Every folder in hosts/ with a flake.nix is a host (folders starting with _ are templates)
-        nixosConfigurations = let
-          hostNames = builtins.filter (n: !(nixpkgs.lib.hasPrefix "_" n) && builtins.pathExists (./hosts + "/${n}/flake.nix")) (
-            builtins.attrNames (nixpkgs.lib.filterAttrs (_: t: t == "directory") (builtins.readDir ./hosts))
-          );
-        in
-          nixpkgs.lib.genAttrs hostNames (n: import (./hosts + "/${n}/flake.nix") args);
+        nixosConfigurations = {
+          bmo = import ./hosts/bmo/flake.nix args;
+        };
       }
     ];
 }

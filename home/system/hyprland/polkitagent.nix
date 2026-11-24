@@ -2,9 +2,5 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [hyprpolkitagent];
 
-  wayland.windowManager.hyprland.extraConfig = ''
-    hl.on("hyprland.start", function()
-      hl.exec_cmd("systemctl --user start hyprpolkitagent")
-    end)
-  '';
+  wayland.windowManager.hyprland.settings.exec-once = ["systemctl --user start hyprpolkitagent"];
 }
