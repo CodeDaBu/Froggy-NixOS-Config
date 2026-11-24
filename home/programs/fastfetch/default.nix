@@ -34,7 +34,7 @@ in {
 
       logo = {
         type = "builtin";
-        source = "nixos_old_small";
+        source = "nixos";
         color = {
           "1" = primary;
           "2" = teal;
@@ -89,7 +89,7 @@ in {
         (row "󰌢" "Host" "host" {})
         (row "󰌽" "Kernel" "kernel" {})
         (row "󰅐" "Uptime" "uptime" {})
-        (row "󰏖" "Packages" "packages" {})
+        (row "󰏖" "Packages" "packages" {format = "{all}";})
         (row "󰪞" "Shell" "shell" {})
 
         (section "├" "desktop")
@@ -98,7 +98,7 @@ in {
 
         (section "├" "hardware")
         (row "󰻠" "CPU" "cpu" {})
-        (row "󰢮" "GPU" "gpu" {})
+        (row "󰢮" "GPU" "gpu" {format = "{name}";})
         (row "󰍛" "RAM" "memory" {})
         (row "󰋊" "SSD" "disk" { folders = "/"; })
         {
