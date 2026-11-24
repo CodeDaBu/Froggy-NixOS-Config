@@ -4,9 +4,11 @@
     bootspec.enable = true;
     loader = {
       efi.canTouchEfiVariables = true;
+      timeout = 3; # seconds the menu waits; hold or tap Space at boot to stop the timer
       systemd-boot = {
         enable = true;
-        consoleMode = "auto";
+        consoleMode = "max"; # highest text resolution, so the menu is sharp
+        editor = false; # no editing kernel parameters from the boot menu
         configurationLimit = 3; # boot menu entries; older generations stay until garbage collected
       };
     };
@@ -25,15 +27,13 @@
     consoleLogLevel = 0;
     initrd.verbose = false;
 
-    # plymouth = {
-    #   enable = true;
-    #   theme = lib.mkForce "cuts_alt";
-    #   themePackages = with pkgs; [
-    #     (adi1090x-plymouth-themes.override {
-    #       selected_themes = ["cuts_alt"];
-    #     })
-    #   ];
-    # };
+    # Boot splash: stylix paints it with the theme palette; the logo is the frog
+    plymouth.enable = true;
+  };
+
+  stylix.targets.plymouth = {
+    logo = ../assets/boot-logo.png;
+    logoAnimated = false; # the frog isn't rotationally symmetric, so no spinning
   };
 
   # To avoid systemd services hanging on shutdown
