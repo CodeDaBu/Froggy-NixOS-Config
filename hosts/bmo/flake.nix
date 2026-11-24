@@ -7,6 +7,13 @@ nixpkgs.lib.nixosSystem {
   modules = [
     {
       nixpkgs.overlays = [
+        (final: prev: {
+          signal-desktop =
+            (import inputs.nixpkgs-signal {
+              system = prev.stdenv.hostPlatform.system;
+              config.allowUnfree = true;
+            }).signal-desktop;
+        })
       ];
       _module.args = {inherit inputs;};
     }

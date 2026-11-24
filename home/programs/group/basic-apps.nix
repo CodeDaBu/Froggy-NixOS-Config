@@ -16,8 +16,8 @@
     switcheroo # Convert images between different formats
     onlyoffice-desktopeditors # Office suite
     blanket # Listen to different sounds
-    signal-desktop # Messaging app
     librewolf # Backup browser
+    pkgs.signal-desktop # Messaging app (newer nixpkgs via overlay, old versions expire)
 
     # I love TUIs
     caligula # User-friendly, lightweight TUI for disk imaging (ISO, USB BOOT)

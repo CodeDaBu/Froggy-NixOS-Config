@@ -65,24 +65,26 @@
 
 ; ── Music Tab ────────────────────────────────────────────────────────────
 (defwidget music-tab []
-  (box :visible {active-tab == "music"} :class "tab-content music-section" :orientation "v" :spacing 14
-    (box :orientation "v" :spacing 5
-      (label :class "music-title"  :halign "start" :text music-title  :limit-width 36 :wrap false)
-      (label :class "music-artist" :halign "start" :text music-artist :limit-width 36 :wrap false)
-      (label :class "music-album"  :halign "start" :text music-album  :limit-width 36 :wrap false))
-    (box :class "controls" :orientation "h" :homogeneous true :hexpand true :spacing 12
-      (button :class "ctrl-btn" :hexpand true :onclick "playerctl previous"   "󰒮")
-      (button :class "ctrl-btn play" :hexpand true :onclick "playerctl play-pause"
-        {music-status == "Playing" ? "󰏤" : "󰐊"})
-      (button :class "ctrl-btn" :hexpand true :onclick "playerctl next"       "󰒭")
-      (button :class "ctrl-btn" :hexpand true :onclick "playerctl stop"       "󰓛"))
-    (box :class "volume-row" :orientation "h" :spacing 8
-      (button :class "vol-btn"
-              :onclick "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-        {volume-muted == "true" ? "󰝟" : "󰕾"})
-      (scale :class "vol-slider" :value volume-level :min 0 :max 100 :hexpand true
-             :onchange "wpctl set-volume @DEFAULT_AUDIO_SINK@ {}%")
-      (label :class "vol-label" :text "${volume-level}%"))))
+  (box :visible {active-tab == "music"} :class "tab-content music-section" :orientation "h" :space-evenly false :spacing 24
+    (box :orientation "v" :space-evenly false :spacing 14 :hexpand true :valign "center"
+      (box :orientation "v" :space-evenly false :spacing 5
+        (label :class "music-title"  :halign "start" :text music-title  :limit-width 30 :wrap false)
+        (label :class "music-artist" :halign "start" :text music-artist :limit-width 30 :wrap false)
+        (label :class "music-album"  :halign "start" :text music-album  :limit-width 30 :wrap false))
+      (box :class "controls" :orientation "h" :halign "start" :space-evenly false :spacing 6
+        (button :class "ctrl-btn" :onclick "playerctl previous"   "󰒮")
+        (button :class "ctrl-btn play" :onclick "playerctl play-pause"
+          {music-status == "Playing" ? "󰏤" : "󰐊"})
+        (button :class "ctrl-btn" :onclick "playerctl next"       "󰒭")
+        (button :class "ctrl-btn" :onclick "playerctl stop"       "󰓛"))
+      (box :class "volume-row" :orientation "h" :space-evenly false :spacing 8
+        (button :class "vol-btn"
+                :onclick "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+          {volume-muted == "true" ? "󰝟" : "󰕾"})
+        (scale :class "vol-slider" :value volume-level :min 0 :max 100 :hexpand true
+               :onchange "wpctl set-volume @DEFAULT_AUDIO_SINK@ {}%")
+        (label :class "vol-label" :text "${volume-level}%")))
+    (image :class "frog" :valign "center" :path "${EWW_CONFIG_DIR}/frog.gif")))
 
 ; ── Calendar Tab ─────────────────────────────────────────────────────────
 (defwidget cal-tab []
@@ -97,33 +99,34 @@
 
 ; ── System Tab ───────────────────────────────────────────────────────────
 (defwidget sys-tab []
-  (box :visible {active-tab == "sys"} :class "tab-content stats-section" :orientation "v" :spacing 14
-    (box :class "sys-clock-row" :orientation "h" :halign "end"
-      (label :class "clock-small" :text clock-time))
+  (box :visible {active-tab == "sys"} :class "tab-content stats-section" :orientation "h" :space-evenly false :spacing 24
+    (box :orientation "v" :space-evenly false :spacing 14 :hexpand true :valign "center"
+      (box :class "sys-clock-row" :orientation "h" :halign "start"
+        (label :class "clock-small" :text clock-time))
 
-    (box :class "stat" :orientation "v" :spacing 4
-      (box :orientation "h" :spacing 0
-        (label :class "stat-label" :text "󰻠  CPU")
-        (label :class "stat-value" :halign "end" :hexpand true :text "${cpu-usage}%"))
-      (progress :class "stat-bar cpu-bar" :value cpu-usage :min 0 :max 100))
+      (box :class "stat" :orientation "v" :space-evenly false :spacing 4
+        (box :orientation "h" :space-evenly false :spacing 0
+          (label :class "stat-label" :text "󰻠  CPU")
+          (label :class "stat-value" :halign "end" :hexpand true :text "${cpu-usage}%"))
+        (progress :class "stat-bar cpu-bar" :value cpu-usage :min 0 :max 100))
 
-    (box :class "stat" :orientation "v" :spacing 4
-      (box :orientation "h" :spacing 0
-        (label :class "stat-label" :text "󰢮  GPU")
-        (label :class "stat-value" :halign "end" :hexpand true :text "${gpu-usage}%  ${gpu-temp}°C"))
-      (progress :class "stat-bar gpu-bar" :value gpu-usage :min 0 :max 100))
+      (box :class "stat" :orientation "v" :space-evenly false :spacing 4
+        (box :orientation "h" :space-evenly false :spacing 0
+          (label :class "stat-label" :text "󰢮  GPU")
+          (label :class "stat-value" :halign "end" :hexpand true :text "${gpu-usage}%  ${gpu-temp}°C"))
+        (progress :class "stat-bar gpu-bar" :value gpu-usage :min 0 :max 100))
 
-    (box :class "stat" :orientation "v" :spacing 4
-      (box :orientation "h" :spacing 0
-        (label :class "stat-label" :text "󰍛  RAM")
-        (label :class "stat-value" :halign "end" :hexpand true :text "${ram-used} / ${ram-total}"))
-      (progress :class "stat-bar ram-bar" :value ram-percent :min 0 :max 100))
+      (box :class "stat" :orientation "v" :space-evenly false :spacing 4
+        (box :orientation "h" :space-evenly false :spacing 0
+          (label :class "stat-label" :text "󰍛  RAM")
+          (label :class "stat-value" :halign "end" :hexpand true :text "${ram-used} / ${ram-total}"))
+        (progress :class "stat-bar ram-bar" :value ram-percent :min 0 :max 100))
 
-    (box :class "stat" :orientation "v" :spacing 4
-      (box :orientation "h" :spacing 0
-        (label :class "stat-label" :text "󰋊  SSD")
-        (label :class "stat-value" :halign "end" :hexpand true :text disk-info))
-      (progress :class "stat-bar disk-bar" :value disk-percent :min 0 :max 100))))
+      (box :class "stat" :orientation "v" :space-evenly false :spacing 4
+        (box :orientation "h" :space-evenly false :spacing 0
+          (label :class "stat-label" :text "󰋊  SSD")
+          (label :class "stat-value" :halign "end" :hexpand true :text disk-info))
+        (progress :class "stat-bar disk-bar" :value disk-percent :min 0 :max 100)))))
 
 ; ── Content widget ───────────────────────────────────────────────────────
 (defwidget dashboard-content []
