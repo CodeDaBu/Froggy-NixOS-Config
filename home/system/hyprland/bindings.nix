@@ -175,7 +175,7 @@ in {
 
     -- Screenshot
     hl.bind(shiftMod .. " + S", hl.dsp.exec_cmd("hyprshot -m region -o ~/Pictures/Screenshots"))
-    hl.bind("Print",            hl.dsp.exec_cmd("hyprshot -m output -o ~/Pictures/Screenshots"))
+    hl.bind("Print",            hl.dsp.exec_cmd("hyprshot -m active -m output -o ~/Pictures/Screenshots"))
 
     -- Workspaces 1-9 on the number row (keycodes 10-18)
     for i = 1, 9 do
