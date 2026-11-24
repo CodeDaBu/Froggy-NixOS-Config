@@ -1,4 +1,4 @@
-# BMO NixOS config
+# Froggy NixOS config
 
 NixOS + Home Manager flake running **Hyprland** with waybar, swaync, fuzzel and an
 eww dashboard. The same desktop, apps and theme come up on every machine; each
