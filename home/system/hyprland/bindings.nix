@@ -6,15 +6,18 @@
 }: let
   colors = config.lib.stylix.colors;
 
-  mkMenu = menu: let
+  mkMenu = {
+    anchor ? "bottom-right",
+    margin ? 15,
+  }: menu: let
     configFile = pkgs.writeText "config.yaml" (
       lib.generators.toYAML {} {
-        anchor = "bottom-right";
+        inherit anchor;
         border = "#${colors.base0D}80";
         background = "#${colors.base01}EE";
         color = "#${colors.base05}";
-        margin_right = 15;
-        margin_bottom = 15;
+        margin_right = margin;
+        margin_bottom = margin;
         rows_per_column = 5;
 
         inherit menu;
@@ -47,7 +50,7 @@
       hyprctl dispatch "hl.dsp.window.close()"
     fi
   '';
-  appsMenu = mkMenu [
+  appsMenu = mkMenu {} [
             {
               key = "a";
               desc = "Proton Authenticator";
@@ -99,7 +102,10 @@
               cmd = "${config.programs.helium.package}/bin/helium --incognito";
             }
           ];
-  powerMenu = mkMenu [
+  powerMenu = mkMenu {
+    anchor = "center";
+    margin = 0;
+  } [
             {
               key = "l";
               desc = "Lock";
