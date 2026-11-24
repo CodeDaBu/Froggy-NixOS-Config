@@ -140,7 +140,24 @@ in {
         clock = {
           format = "{:%H:%M}";
           format-alt = "{:%a %d %b %Y}";
-          tooltip-format = "<tt><small>{calendar}</small></tt>";
+          tooltip-format = "<tt>{calendar}</tt>";
+          calendar = {
+            mode = "month";
+            weeks-pos = "left";
+            on-scroll = 1;
+            format = {
+              months = "<span color='#${config.lib.stylix.colors.base0D}'><b>{}</b></span>";
+              weeks = "<span color='#${config.lib.stylix.colors.base0C}'>{}</span>";
+              weekdays = "<span color='#${config.lib.stylix.colors.base0D}'><b>{}</b></span>";
+              days = "<span color='#${config.lib.stylix.colors.base05}'>{}</span>";
+              today = "<span color='#${config.lib.stylix.colors.base00}' bgcolor='#${config.lib.stylix.colors.base0D}'><b>{}</b></span>";
+            };
+          };
+          actions = {
+            on-scroll-up = "shift_up";
+            on-scroll-down = "shift_down";
+            on-click-right = "mode";
+          };
         };
 
         "custom/weather" = {
@@ -289,6 +306,18 @@ in {
         color: #${base05};
         padding: 0 12px;
         font-weight: bold;
+      }
+
+      tooltip {
+        background: #${base00};
+        border: 1px solid #${base03};
+        border-radius: 0;
+      }
+
+      tooltip label {
+        color: #${base05};
+        font-size: 20px;
+        padding: 10px 14px;
       }
 
       #custom-weather {

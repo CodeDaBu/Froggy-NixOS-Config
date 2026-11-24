@@ -7,7 +7,7 @@
       systemd-boot = {
         enable = true;
         consoleMode = "auto";
-        configurationLimit = 8;
+        configurationLimit = 3; # boot menu entries; older generations stay until garbage collected
       };
     };
     tmp.cleanOnBoot = true;

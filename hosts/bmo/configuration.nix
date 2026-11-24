@@ -1,45 +1,14 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{config, ...}: {
   imports = [
-    # Mostly system related configuration
-    ../../nixos/nvidia.nix # CHANGEME: Remove this line if you don't have an Nvidia GPU
-    ../../nixos/audio.nix
-    ../../nixos/bluetooth.nix
-    ../../nixos/fonts.nix
-    ../../nixos/home-manager.nix
-    ../../nixos/nix.nix
-    ../../nixos/systemd-boot.nix
-    ../../nixos/tuigreet.nix
-    ../../nixos/users.nix
-    ../../nixos/utils.nix
-    ../../nixos/hyprland.nix
-    #../../nixos/usbguard.nix
-    ../../home/programs/helium/system.nix # I hate browser's configuration..
-
-    #../../nixos/omen.nix # CHANGEME: For my laptop only, remove this (OMEN 16)
+    ../common/configuration.nix
+    ../../nixos/nvidia.nix # Hybrid AMD iGPU + Nvidia dGPU (bus IDs in variables.nix)
 
     # You should let those lines as is
     ./hardware-configuration.nix
     ./variables.nix
-
-    ../../nixos/steam.nix
   ];
 
-  environment.systemPackages = [
-    pkgs.claude-code
-  ];
-
-  services.flatpak.enable = true;
-
-  # USBGuard:
-  # Allow all USB devices until a proper policy is configured.
-  # Run `sudo usbguard generate-policy` with your devices plugged in,
-  # then set rules = "<output>" and switch implicitPolicyTarget to "block".
-  # services.usbguard.implicitPolicyTarget = lib.mkForce "allow";
-
+  # USBGuard rules for this laptop (only active if nixos/usbguard.nix is imported)
   services.usbguard.rules = ''
     allow id 1d6b:0002 serial "0000:05:00.3" name "xHCI Host Controller" hash "4a4NgfdUaJO43rkCzmWRSeHHR/uUh5+SNsXnhosm9qs=" parent-hash "ldMchY4Tt4GPUYo30eNGvai+Fs/EdnVY3vMyxJUq4Nk=" with-interface 09:00:00 with-connect-type ""
     allow id 1d6b:0003 serial "0000:05:00.3" name "xHCI Host Controller" hash "d+DNGWARDtv9nEK2ZvnNOCtFernuMu5/e/oZ7kCppqQ=" parent-hash "ldMchY4Tt4GPUYo30eNGvai+Fs/EdnVY3vMyxJUq4Nk=" with-interface 09:00:00 with-connect-type ""
@@ -63,8 +32,6 @@
     allow id 13fd:5900 serial "50026B76861EE752    " name "External" hash "l/QvVV5hzZj1z6OUwB/kWl+WnH/7awrdMBoiNVx660M=" parent-hash "MSXcPAlZqkpTyZQylOhSIB8eMfST2AzVHV9EbrBGTWc=" with-interface { 08:06:50 08:06:62 } with-connect-type "unknown"
   '';
 
-  home-manager.users."${config.var.username}" = import ./home.nix;
 
-  # Don't touch this
-  system.stateVersion = "24.05";
+  home-manager.users."${config.var.username}" = import ./home.nix;
 }
