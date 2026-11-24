@@ -9,10 +9,12 @@
   mkMenu = {
     anchor ? "bottom-right",
     margin ? 15,
+    font ? "monospace 10",
+    padding ? 8,
   }: menu: let
     configFile = pkgs.writeText "config.yaml" (
       lib.generators.toYAML {} {
-        inherit anchor;
+        inherit anchor font padding;
         border = "#${colors.base0D}80";
         background = "#${colors.base01}EE";
         color = "#${colors.base05}";
@@ -105,6 +107,8 @@
   powerMenu = mkMenu {
     anchor = "center";
     margin = 0;
+    font = "Monocraft 24";
+    padding = 36;
   } [
             {
               key = "l";
@@ -138,11 +142,11 @@ in {
     local shiftMod = "SUPER + SHIFT"
 
     -- Applications
-    hl.bind(shiftMod .. " + A", hl.dsp.exec_cmd("${lib.getExe appsMenu}"))
+    hl.bind(shiftMod .. " + A", hl.dsp.exec_cmd("pkill -x wlr-which-key || ${lib.getExe appsMenu}"))
     hl.bind(mod .. " + B",      hl.dsp.exec_cmd("uwsm app -- ${config.programs.helium.package}/bin/helium"))
 
     -- Power menu
-    hl.bind(mod .. " + X",      hl.dsp.exec_cmd("${lib.getExe powerMenu}"))
+    hl.bind(mod .. " + X",      hl.dsp.exec_cmd("pkill -x wlr-which-key || ${lib.getExe powerMenu}"))
 
     -- Quick launch
     hl.bind(mod .. " + RETURN", hl.dsp.exec_cmd("uwsm app -- ${pkgs.ghostty}/bin/ghostty"))
