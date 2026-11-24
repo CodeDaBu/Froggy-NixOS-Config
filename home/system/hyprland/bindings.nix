@@ -47,17 +47,7 @@
       hyprctl dispatch "hl.dsp.window.close()"
     fi
   '';
-in {
-  wayland.windowManager.hyprland.settings = {
-    "$mod" = "SUPER";
-    "$shiftMod" = "SUPER_SHIFT";
-
-    bind =
-      [
-        # Applications
-        (
-          "$shiftMod, A, exec, "
-          + lib.getExe (mkMenu [
+  appsMenu = mkMenu [
             {
               key = "a";
               desc = "Proton Authenticator";
@@ -108,15 +98,8 @@ in {
               desc = "Helium (Incognito)";
               cmd = "${config.programs.helium.package}/bin/helium --incognito";
             }
-          ])
-        )
-
-        "$mod, B, exec, uwsm app -- ${config.programs.helium.package}/bin/helium"
-
-        # Power menu
-        (
-          "$mod, X, exec, "
-          + lib.getExe (mkMenu [
+          ];
+  powerMenu = mkMenu [
             {
               key = "l";
               desc = "Lock";
@@ -142,68 +125,69 @@ in {
               desc = "Logout";
               cmd = "uwsm stop";
             }
-          ])
-        )
+          ];
+in {
+  wayland.windowManager.hyprland.extraConfig = ''
+    local mod      = "SUPER"
+    local shiftMod = "SUPER + SHIFT"
 
-        # Quick launch
-        "$mod, RETURN, exec, uwsm app -- ${pkgs.ghostty}/bin/ghostty"
-        "$mod, E, exec, uwsm app -- ${pkgs.thunar}/bin/thunar"
-        "$mod, SPACE, exec, pgrep -x fuzzel && pkill -x fuzzel || uwsm app -- fuzzel"
-        "$mod, D, exec, ${dashboardToggle}"
-        "$mod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
+    -- Applications
+    hl.bind(shiftMod .. " + A", hl.dsp.exec_cmd("${lib.getExe appsMenu}"))
+    hl.bind(mod .. " + B",      hl.dsp.exec_cmd("uwsm app -- ${config.programs.helium.package}/bin/helium"))
 
-        # Windows
-        "$mod, Q, exec, ${dashboardKill}"
-        "$mod, F, fullscreen"
-        "$shiftMod, F, togglefloating"
+    -- Power menu
+    hl.bind(mod .. " + X",      hl.dsp.exec_cmd("${lib.getExe powerMenu}"))
 
-        # Focus
-        "$mod, H, movefocus, l"
-        "$mod, J, movefocus, d"
-        "$mod, K, movefocus, u"
-        "$mod, L, movefocus, r"
-        "$shiftMod, H, focusmonitor, -1"
-        "$shiftMod, J, layoutmsg, removemaster"
-        "$shiftMod, K, layoutmsg, addmaster"
-        "$shiftMod, L, focusmonitor, 1"
+    -- Quick launch
+    hl.bind(mod .. " + RETURN", hl.dsp.exec_cmd("uwsm app -- ${pkgs.ghostty}/bin/ghostty"))
+    hl.bind(mod .. " + E",      hl.dsp.exec_cmd("uwsm app -- ${pkgs.thunar}/bin/thunar"))
+    hl.bind(mod .. " + SPACE",  hl.dsp.exec_cmd("pgrep -x fuzzel && pkill -x fuzzel || uwsm app -- fuzzel"))
+    hl.bind(mod .. " + D",      hl.dsp.exec_cmd("${dashboardToggle}"))
+    hl.bind(mod .. " + V",      hl.dsp.exec_cmd("cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"))
 
-        # Screenshot
-        "$shiftMod, S, exec, hyprshot -m region -o ~/Pictures/Screenshots"
-        ", Print, exec, hyprshot -m output -o ~/Pictures/Screenshots"
-      ]
-      ++ (builtins.concatLists (
-        builtins.genList (
-          i: let
-            ws = i + 1;
-          in [
-            "$mod, code:1${toString i}, workspace, ${toString ws}"
-            "$mod SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
-          ]
-        )
-        9
-      ));
+    -- Windows
+    hl.bind(mod .. " + Q",      hl.dsp.exec_cmd("${dashboardKill}"))
+    hl.bind(mod .. " + F",      hl.dsp.window.fullscreen())
+    hl.bind(shiftMod .. " + F", hl.dsp.window.float({ action = "toggle" }))
 
-    bindm = [
-      "$mod, mouse:272, movewindow"
-      "$mod, R, resizewindow"
-    ];
+    -- Focus
+    hl.bind(mod .. " + H", hl.dsp.focus({ direction = "left" }))
+    hl.bind(mod .. " + J", hl.dsp.focus({ direction = "down" }))
+    hl.bind(mod .. " + K", hl.dsp.focus({ direction = "up" }))
+    hl.bind(mod .. " + L", hl.dsp.focus({ direction = "right" }))
+    hl.bind(shiftMod .. " + H", hl.dsp.focus({ monitor = "-1" }))
+    hl.bind(shiftMod .. " + J", hl.dsp.layout("removemaster"))
+    hl.bind(shiftMod .. " + K", hl.dsp.layout("addmaster"))
+    hl.bind(shiftMod .. " + L", hl.dsp.focus({ monitor = "+1" }))
 
-    bindl = [
-      # Brightness
-      ", XF86MonBrightnessUp, exec, brightnessctl set 5%+"
-      ", XF86MonBrightnessDown, exec, brightnessctl set 5%-"
+    -- Screenshot
+    hl.bind(shiftMod .. " + S", hl.dsp.exec_cmd("hyprshot -m region -o ~/Pictures/Screenshots"))
+    hl.bind("Print",            hl.dsp.exec_cmd("hyprshot -m output -o ~/Pictures/Screenshots"))
 
-      # Media
-      ", XF86AudioPlay, exec, playerctl play-pause"
-      ", XF86AudioPause, exec, playerctl play-pause"
-      ", XF86AudioNext, exec, playerctl next"
-      ", XF86AudioPrev, exec, playerctl previous"
-      ", XF86AudioStop, exec, playerctl stop"
+    -- Workspaces 1-9 on the number row (keycodes 10-18)
+    for i = 1, 9 do
+      hl.bind(mod .. " + code:" .. (9 + i),         hl.dsp.focus({ workspace = i }))
+      hl.bind(mod .. " + SHIFT + code:" .. (9 + i), hl.dsp.window.move({ workspace = i }))
+    end
 
-      # Volume
-      ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-      ", XF86AudioRaiseVolume, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"
-      ", XF86AudioLowerVolume, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
-    ];
-  };
+    -- Mouse
+    hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
+    hl.bind(mod .. " + R",         hl.dsp.window.resize(), { mouse = true })
+
+    -- Brightness
+    hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("brightnessctl set 5%+"), { locked = true })
+    hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl set 5%-"), { locked = true })
+
+    -- Media
+    hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
+    hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
+    hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"),       { locked = true })
+    hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
+    hl.bind("XF86AudioStop",  hl.dsp.exec_cmd("playerctl stop"),       { locked = true })
+
+    -- Volume
+    hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true })
+    hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true })
+    hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true })
+  '';
 }

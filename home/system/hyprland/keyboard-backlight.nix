@@ -40,5 +40,9 @@
 
   command = "bash ${keyboard-backlight}/bin/keyboard-backlight &";
 in {
-  wayland.windowManager.hyprland.settings.exec-once = [command];
+  wayland.windowManager.hyprland.extraConfig = ''
+    hl.on("hyprland.start", function()
+      hl.exec_cmd("${command}")
+    end)
+  '';
 }

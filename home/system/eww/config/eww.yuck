@@ -9,10 +9,10 @@
   `awk 'NR==1{u1=$2+$4;t1=$2+$3+$4+$5+$6+$7+$8} NR==2{u2=$2+$4;t2=$2+$3+$4+$5+$6+$7+$8; printf "%.0f",(u2-u1)/(t2-t1)*100}' <(grep "^cpu " /proc/stat) <(sleep 0.5; grep "^cpu " /proc/stat)`)
 
 (defpoll gpu-usage :interval "3s"
-  `nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null | tr -d ' \n' || echo "0"`)
+  `v=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null | tr -d ' \n'); echo "${v:-0}"`)
 
 (defpoll gpu-temp :interval "5s"
-  `nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits 2>/dev/null | tr -d ' \n' || echo "0"`)
+  `v=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits 2>/dev/null | tr -d ' \n'); echo "${v:-0}"`)
 
 (defpoll ram-used :interval "3s"
   `free -h | awk '/^Mem/{print $3}'`)

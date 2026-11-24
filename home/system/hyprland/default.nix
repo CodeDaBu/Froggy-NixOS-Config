@@ -53,7 +53,7 @@ in {
 
   wayland.windowManager.hyprland = {
     enable = true;
-    configType = "hyprlang";
+    configType = "lua";
     xwayland.enable = true;
     systemd = {
       enable = false;
@@ -64,37 +64,9 @@ in {
     package = null;
     portalPackage = null;
 
-    settings = {
-      exec-once = [
-        "dbus-update-activation-environment --systemd --all &"
-        "uwsm app -- waybar"
-        "eww daemon"
-      ];
-
-      monitor = [
-        ",prefered,auto,1" # default
-      ];
-
-      env = [
-        "XDG_CURRENT_DESKTOP,Hyprland"
-        "XDG_SESSION_TYPE,wayland"
-        "XDG_SESSION_DESKTOP,Hyprland"
-        "ANKI_WAYLAND,1"
-        "DISABLE_QT5_COMPAT,0"
-        "QT_AUTO_SCREEN_SCALE_FACTOR,1"
-        "QT_QPA_PLATFORM,wayland;xcb"
-        "QT_QPA_PLATFORMTHEME,gtk3"
-        "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
-        "ELECTRON_OZONE_PLATFORM_HINT,auto"
-        "DIRENV_LOG_FORMAT,"
-        "SDL_VIDEODRIVER,wayland"
-        "CLUTTER_BACKEND,wayland"
-      ];
-
-      cursor = {
-        no_hardware_cursors = true;
-        default_monitor = "eDP-2";
-      };
+    # Colors (borders, shadow, groupbar, background) are added by stylix.
+    settings.config = {
+      cursor.no_hardware_cursors = true;
 
       general = {
         resize_on_border = true;
@@ -115,10 +87,7 @@ in {
           render_power = 3;
         };
         blur = {
-          enabled =
-            if blur
-            then "true"
-            else "false";
+          enabled = blur;
           size = 18;
         };
       };
@@ -129,26 +98,6 @@ in {
         mfact = 0.5;
       };
 
-      gesture = "3, horizontal, workspace";
-
-      windowrule = [
-        "match:class .*, suppress_event maximize"
-        "match:class helium, suppress_event fullscreen"
-        "match:class helium, sync_fullscreen false"
-
-        "match:class proton-authenticator, float on"
-        "match:class proton-authenticator, center on"
-        "match:class proton-authenticator, size 500 400"
-
-        "match:class protonvpn-app, float on"
-        "match:class protonvpn-app, center on"
-        "match:class protonvpn-app, size 500 400"
-
-        "match:title run-bg, float on"
-        "match:title run-bg, center on"
-        "match:title run-bg, size 700 80"
-      ];
-
       misc = {
         disable_hyprland_logo = true;
         disable_splash_rendering = true;
@@ -158,7 +107,6 @@ in {
 
       input = {
         kb_layout = keyboardLayout;
-
         kb_options = "caps:escape";
         follow_mouse = 1;
         sensitivity = 0.5;
@@ -172,9 +120,42 @@ in {
         };
       };
 
-      ecosystem = {
-        no_update_news = true;
-      };
+      ecosystem.no_update_news = true;
     };
+
+    extraConfig = ''
+      -- Any monitor: use the preferred mode. Per-host monitors are added in hosts/<name>/home.nix
+      hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
+
+      hl.on("hyprland.start", function()
+        hl.exec_cmd("dbus-update-activation-environment --systemd --all")
+        hl.exec_cmd("uwsm app -- waybar")
+        hl.exec_cmd("eww daemon")
+      end)
+
+      hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
+      hl.env("XDG_SESSION_TYPE", "wayland")
+      hl.env("XDG_SESSION_DESKTOP", "Hyprland")
+      hl.env("ANKI_WAYLAND", "1")
+      hl.env("DISABLE_QT5_COMPAT", "0")
+      hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1")
+      hl.env("QT_QPA_PLATFORM", "wayland;xcb")
+      hl.env("QT_QPA_PLATFORMTHEME", "gtk3")
+      hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
+      hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
+      hl.env("DIRENV_LOG_FORMAT", "")
+      hl.env("SDL_VIDEODRIVER", "wayland")
+      hl.env("CLUTTER_BACKEND", "wayland")
+
+      hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
+
+      hl.window_rule({ name = "suppress-maximize-events", match = { class = ".*" }, suppress_event = "maximize" })
+
+      hl.window_rule({ name = "helium-fullscreen", match = { class = "helium" }, suppress_event = "fullscreen", sync_fullscreen = false })
+
+      hl.window_rule({ name = "proton-authenticator", match = { class = "proton-authenticator" }, float = true, center = true, size = "500 400" })
+      hl.window_rule({ name = "protonvpn-app",        match = { class = "protonvpn-app" },        float = true, center = true, size = "500 400" })
+      hl.window_rule({ name = "run-bg",               match = { title = "run-bg" },               float = true, center = true, size = "700 80" })
+    '';
   };
 }

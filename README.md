@@ -1,8 +1,9 @@
 # BMO NixOS config
 
-NixOS + Home Manager flake for **bmo** (HP laptop, AMD iGPU + Nvidia dGPU) running
-**Hyprland** with waybar, swaync, fuzzel and an eww dashboard. Based on
-[nixy](https://github.com/anotherhadi/nixy), trimmed down to a single host.
+NixOS + Home Manager flake running **Hyprland** with waybar, swaync, fuzzel and an
+eww dashboard. The same desktop, apps and theme come up on every machine; each
+machine only adds its own hardware, GPU and monitor settings. Based on
+[nixy](https://github.com/anotherhadi/nixy).
 
 ## Screenshots
 
@@ -14,22 +15,50 @@ The dashboard (`Super + D`) has three tabs:
 | --- | --- | --- |
 | ![Music tab](screenshots/dashboard-music.png) | ![Calendar tab](screenshots/dashboard-calendar.png) | ![System tab](screenshots/dashboard-system.png) |
 
+## Install on a new PC
+
+1. Install NixOS normally (create your user during the installer, UEFI/systemd-boot).
+2. Clone this repo and create a host for the machine:
+
+   ```sh
+   nix-shell -p git
+   git clone https://github.com/CodeDaBu/nixos-config ~/.config/nixos
+   cd ~/.config/nixos
+   ./scripts/new-host.sh <hostname> [username]   # username defaults to dabu
+   ```
+
+   The script copies `hosts/_template` to `hosts/<hostname>`, generates the
+   hardware config, finds an Nvidia GPU (and the AMD/Intel iGPU) and fills in the PCI
+   bus IDs, and `git add`s the new host (flakes only see tracked files).
+3. Build it: `sudo nixos-rebuild switch --flake ~/.config/nixos#<hostname>`
+   (add `--extra-experimental-features 'nix-command flakes'` the first time).
+4. Set a password if the user is new (`sudo passwd <username>`), reboot and pick Hyprland
+   in the greeter.
+
+Not in git, so back up/restore it yourself: browser profiles and logins, Signal chats,
+SSH keys, Proton logins, Steam games, flatpak data and your files.
+
 ## Rebuild
 
-The config lives in `~/.config/nixos` on the laptop.
+The config lives in `~/.config/nixos`.
 
 ```sh
-rebuild            # alias for: sudo nixos-rebuild switch --flake ~/.config/nixos#bmo
+rebuild            # alias for: sudo nixos-rebuild switch --flake ~/.config/nixos#<this host>
 ```
 
 ## Layout
 
 | Path | What's in it |
 | --- | --- |
-| `flake.nix` | Inputs (nixpkgs unstable, Hyprland, home-manager, stylix, nvf, …) and the `bmo` output |
-| `hosts/bmo/` | Host config: `configuration.nix` (system), `home.nix` (user), `variables.nix` (username, locale, keyboard), `my-apps.nix` (personal packages), hardware config |
+| `flake.nix` | Inputs (nixpkgs unstable, Hyprland, home-manager, stylix, nvf, …); every folder in `hosts/` becomes a `nixosConfigurations.<name>` |
+| `hosts/common/` | Everything shared by all machines: `configuration.nix` (system) and `home.nix` (user modules) |
+| `hosts/<name>/` | Only what differs per machine: `variables.nix` (hostname, username, locale, GPU bus IDs), `hardware-configuration.nix`, `home.nix` (monitors), `configuration.nix` |
+| `hosts/_template/` | Copied by `scripts/new-host.sh` to create a new host |
+| `lib/mk-host.nix` | Builds a host (same modules for every machine) |
+| `scripts/new-host.sh` | Creates a host for the machine you are on |
+| `assets/` | Profile picture |
 | `nixos/` | System modules: `hyprland.nix`, `nvidia.nix`, audio, bluetooth, fonts, boot, greeter, steam, … |
-| `home/system/` | Desktop: `hyprland/` (settings, keybinds, animations), `waybar`, `swaync`, `fuzzel`, `eww` (dashboard), `hyprpaper` |
+| `home/system/` | Desktop: `hyprland/` (generates `hyprland.lua` via home-manager: settings, keybinds, animations), `waybar`, `swaync`, `fuzzel`, `eww` (dashboard), `hyprpaper` |
 | `home/programs/` | User programs: ghostty, nvf (neovim), shell (zsh), git, helium, yazi, thunar, app groups |
 | `themes/nixy.nix` | Stylix theme: green "nature" base16 scheme, Monocraft font, gaps/rounding/opacity |
 | `wallpapers/` | `nature.jpg` (used by stylix + hyprpaper) |
@@ -57,34 +86,18 @@ rebuild            # alias for: sudo nixos-rebuild switch --flake ~/.config/nixo
 
 ## GPU (PRIME offload)
 
-`nixos/nvidia.nix` runs the AMD iGPU as primary and offloads to Nvidia.
-The bus IDs **must** match the hardware or Hyprland won't start:
+`nixos/nvidia.nix` is only imported by hosts with an Nvidia GPU. On a hybrid laptop it
+renders on the AMD/Intel iGPU and offloads to Nvidia. The bus IDs **must** match the
+hardware or Hyprland won't start. They live in `hosts/<name>/variables.nix`
+(`new-host.sh` fills them in for you):
 
 ```nix
-amdgpuBusId = "PCI:5:0:0"; # AMD iGPU  (lspci: 05:00.0)
-nvidiaBusId = "PCI:1:0:0"; # Nvidia    (lspci: 01:00.0)
+gpu = {
+  nvidiaBusId = "PCI:1:0:0"; # lspci: 01:00.0
+  amdgpuBusId = "PCI:5:0:0"; # lspci: 05:00.0 (or intelBusId for an Intel iGPU)
+};
 ```
 
 Check them with `lspci | grep -Ei "vga|3d|display"`. lspci prints hex
-(`05:00.0`); NixOS wants decimal `PCI:bus:device:function`.
-
-## Changelog
-
-### 2026-11-24 — Hyprland fix (commit `5637b17`)
-
-Hyprland stopped starting after the 23.11 changes. Cause: the cleanup commit
-`50d37bf` changed `amdgpuBusId` in `nixos/nvidia.nix` from `PCI:5:0:0` to
-`PCI:6:0:0`. The iGPU on this laptop is at `05:00.0` (its USB controllers are
-`05:00.3` / `05:00.4`, see the usbguard rules in `hosts/bmo/configuration.nix`),
-so the wrong ID broke PRIME and Hyprland. **Only that one line was changed back.**
-Nothing else from 23.11 was touched; flake inputs were not updated.
-
-> If you have local commits on the laptop that aren't pushed yet, run
-> `git pull --rebase` before pushing so they sit on top of this fix.
-
-### 2026-11-23
-
-- Removed other hosts, server modules and the caelestia-shell; added steam, flatpak
-- New desktop: waybar, swaync sidebar, fuzzel, eww dashboard (music / calendar / system tabs)
-- Green "nature" theme, Monocraft font, square corners (`rounding = 0`)
-- Keybinds rewritten for the new tools (see table above)
+(`05:00.0`); NixOS wants decimal `PCI:bus:device:function`. A desktop with only an
+Nvidia card leaves out the iGPU ID and gets no PRIME setup.
