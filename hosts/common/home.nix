@@ -28,6 +28,7 @@
 
     # System (Desktop environment like stuff)
     ../../home/system/hyprland
+    ../../home/system/hyprlock
     ../../home/system/waybar
     ../../home/system/swaync
     ../../home/system/fuzzel

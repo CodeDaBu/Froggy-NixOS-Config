@@ -103,7 +103,7 @@
             {
               key = "l";
               desc = "Lock";
-              cmd = "hyprlock";
+              cmd = "pidof hyprlock || ${config.programs.hyprlock.package}/bin/hyprlock";
             }
             {
               key = "s";
@@ -144,6 +144,9 @@ in {
     hl.bind(mod .. " + SPACE",  hl.dsp.exec_cmd("pgrep -x fuzzel && pkill -x fuzzel || uwsm app -- fuzzel"))
     hl.bind(mod .. " + D",      hl.dsp.exec_cmd("${dashboardToggle}"))
     hl.bind(mod .. " + V",      hl.dsp.exec_cmd("cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"))
+
+    -- Lock screen
+    hl.bind(mod .. " + CTRL + L", hl.dsp.exec_cmd("pidof hyprlock || ${config.programs.hyprlock.package}/bin/hyprlock"))
 
     -- Windows
     hl.bind(mod .. " + Q",      hl.dsp.exec_cmd("${dashboardKill}"))

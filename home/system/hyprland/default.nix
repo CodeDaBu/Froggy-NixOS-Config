@@ -103,6 +103,7 @@ in {
         disable_splash_rendering = true;
         disable_autoreload = true;
         focus_on_activate = true;
+        allow_session_lock_restore = true; # a new hyprlock can take over if one crashes
       };
 
       input = {
