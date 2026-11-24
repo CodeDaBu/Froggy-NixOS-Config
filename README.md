@@ -24,13 +24,15 @@ machine only adds its own hardware, GPU and monitor settings. Based on
 
 ## Screenshots
 
-![Desktop with the eww dashboard open](screenshots/desktop.png)
+![Desktop with a terminal running fastfetch](screenshots/desktop-fastfetch.png)
 
 ### Bar
 
 ![Waybar](screenshots/bar.png)
 
 ### Dashboard (`Super + D`)
+
+![Desktop with the eww dashboard open](screenshots/desktop.png)
 
 | Music | Calendar | System |
 | --- | --- | --- |
@@ -40,11 +42,15 @@ machine only adds its own hardware, GPU and monitor settings. Based on
 
 ![Power menu](screenshots/power-menu.png)
 
+### Lock screen (`Super + Ctrl + L`)
+
+![Lock screen](screenshots/lockscreen.png)
+
 ### Terminal
 
-| fastfetch | Prompt |
-| --- | --- |
-| ![fastfetch](screenshots/fastfetch.png) | ![Terminal prompt](screenshots/terminal.png) |
+![fastfetch](screenshots/fastfetch.png)
+
+![Terminal prompt](screenshots/terminal.png)
 
 ## Install on a new PC
 
