@@ -48,8 +48,6 @@ machine only adds its own hardware, GPU and monitor settings. Based on
 
 ### Terminal
 
-![fastfetch](screenshots/fastfetch.png)
-
 ![Terminal prompt](screenshots/terminal.png)
 
 ## Install on a new PC
