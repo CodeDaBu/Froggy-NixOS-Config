@@ -8,8 +8,6 @@
     type = lib.types.attrs;
     default = {
       rounding = 0;
-      bar-rounding = 0;
-      bar-thickness = 0;
       gaps-in = 8;
       gaps-out = 8 * 2;
       active-opacity = 0.96;
@@ -17,7 +15,6 @@
       blur = true;
       border-size = 2;
       animation-speed = "medium"; # "fast" | "medium" | "slow"
-      fetch = "none"; # "nerdfetch" | "neofetch" | "pfetch" | "none"
     };
     description = "Theme configuration options";
   };

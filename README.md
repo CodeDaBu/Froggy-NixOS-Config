@@ -92,11 +92,11 @@ rebuild            # alias for: sudo nixos-rebuild switch --flake ~/.config/nixo
 | `hosts/_template/` | Copied by `scripts/new-host.sh` to create a new host |
 | `lib/mk-host.nix` | Builds a host (same modules for every machine) |
 | `scripts/new-host.sh` | Creates a host for the machine you are on |
-| `assets/` | Profile picture |
+| `assets/` | Profile picture, boot-splash logo, the dashboard frog GIF |
 | `nixos/` | System modules: `hyprland.nix`, `nvidia.nix`, audio, bluetooth, fonts, boot, greeter, steam, … |
 | `home/system/` | Desktop: `hyprland/` (generates `hyprland.lua` via home-manager: settings, keybinds, animations), `waybar`, `swaync`, `fuzzel`, `eww` (dashboard), `hyprpaper` |
 | `home/programs/` | User programs: ghostty, nvf (neovim), shell (zsh), git, helium, yazi, thunar, app groups |
-| `themes/nixy.nix` | Stylix theme: green "nature" base16 scheme, Monocraft font, gaps/rounding/opacity |
+| `themes/froggy.nix` | Stylix theme: green "nature" base16 scheme, Monocraft font, gaps/rounding/opacity |
 | `wallpapers/` | `nature.jpg` (used by stylix + hyprpaper) |
 
 ## Keybinds

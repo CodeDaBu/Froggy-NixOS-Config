@@ -1,5 +1,4 @@
 {
-  pkgs,
   pkgs-stable,
   pkgs-nur-hadi,
 }:

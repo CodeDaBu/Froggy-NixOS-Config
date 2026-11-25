@@ -2,7 +2,7 @@
   pkgs,
   configDirectory,
 }:
-pkgs.writeShellScriptBin "nixy"
+pkgs.writeShellScriptBin "froggy"
 # bash
 ''
   EXTRA_ARGS="''${@:2}"
@@ -16,12 +16,12 @@ pkgs.writeShellScriptBin "nixy"
 
     # "icon;name;command"[]
     apps=(
-      "󰑓;Rebuild;nixy rebuild"
-      "󰐊;Test;nixy test"
-      "󰚰;Update;nixy update"
-      ";Collect Garbage;nixy gc"
-      "󰍜;Clean Boot Menu;nixy cb"
-      ";List generation;nixy listgen"
+      "󰑓;Rebuild;froggy rebuild"
+      "󰐊;Test;froggy test"
+      "󰚰;Update;froggy update"
+      ";Collect Garbage;froggy gc"
+      "󰍜;Clean Boot Menu;froggy cb"
+      ";List generation;froggy listgen"
     )
 
     # Apply default icons if empty:

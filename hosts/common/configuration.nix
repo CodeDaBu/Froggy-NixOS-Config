@@ -14,7 +14,6 @@
     ../../nixos/hyprland.nix
     ../../nixos/steam.nix
     ../../home/programs/helium/system.nix # I hate browser's configuration..
-    #../../nixos/usbguard.nix
   ];
 
   environment.systemPackages = [

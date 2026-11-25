@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  xdg.configFile."eww/frog.gif".source = ./config/frog.gif;
+  xdg.configFile."eww/frog.gif".source = ../../../assets/frog.gif;
 
   programs.eww = {
     enable = true;

@@ -3,7 +3,6 @@
 # PAM for hyprlock is set in nixos/utils.nix.
 {
   config,
-  pkgs,
   ...
 }: let
   c = config.lib.stylix.colors;

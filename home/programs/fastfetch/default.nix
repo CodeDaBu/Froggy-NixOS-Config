@@ -1,4 +1,4 @@
-# Fastfetch with the nature-green palette from the stylix theme (themes/nixy.nix)
+# Fastfetch with the nature-green palette from the stylix theme (themes/froggy.nix)
 {
   config,
   lib,
@@ -10,7 +10,6 @@
   primary = hex c.base0D; # green accent
   teal = hex c.base0C;
   text = hex c.base05;
-  muted = hex c.base04;
   outline = hex c.base03;
 
   section = corner: name: {

@@ -12,9 +12,8 @@
     ../../home/programs/git
     ../../home/programs/git/lazygit.nix
     ../../home/programs/fastfetch
-    #../../home/programs/git/signing.nix # CHANGEME: Change the key or remove this file
     ../../home/programs/thunar
-    ../../home/programs/nixy
+    ../../home/programs/froggy
     ../../home/programs/nightshift
     ../../home/programs/nix-utils
     ../../home/programs/spotatui
@@ -37,7 +36,6 @@
     ../../home/system/mime
     ../../home/system/udiskie
 
-    #../../hosts/bmo/secrets # CHANGEME: You should probably remove this line, this is where I store my secrets
   ];
 
   home = {
@@ -53,7 +51,7 @@
 
   programs = {
     home-manager.enable = true;
-    nixy = {
+    froggy = {
       enable = true;
       configDirectory = config.var.configDirectory;
     };
