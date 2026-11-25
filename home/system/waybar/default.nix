@@ -97,6 +97,26 @@
 in {
   stylix.targets.waybar.enable = false;
 
+  # Hide the bar while a window is fullscreen (games); waybar toggles visibility on SIGUSR1.
+  wayland.windowManager.hyprland.extraConfig = ''
+    local barHidden = false
+    local function updateBar()
+      local ws = hl.get_active_workspace()
+      -- fullscreen_mode 1 is "maximized" (keep the bar), anything else with a fullscreen window is real fullscreen
+      local want = ws ~= nil and ws.has_fullscreen == true and ws.fullscreen_mode ~= 1
+      if want ~= barHidden then
+        barHidden = want
+        hl.exec_cmd("pkill -SIGUSR1 -x '[.]waybar-wrapped|waybar'")
+      end
+    end
+    local function scheduleBarUpdate()
+      hl.timer(updateBar, { timeout = 150, type = "oneshot" })
+    end
+    for _, ev in ipairs({ "window.fullscreen", "window.active", "window.close", "window.destroy", "workspace.active" }) do
+      hl.on(ev, scheduleBarUpdate)
+    end
+  '';
+
   home.packages = with pkgs; [
     playerctl
     pavucontrol
