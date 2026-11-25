@@ -1,15 +1,16 @@
-# Systemd-boot configuration for NixOS
+# Boot configuration for NixOS: themed GRUB (EFI) + Plymouth splash
 {pkgs, ...}: {
   boot = {
     bootspec.enable = true;
     loader = {
       efi.canTouchEfiVariables = true;
-      timeout = 3; # seconds the menu waits; hold or tap Space at boot to stop the timer
-      systemd-boot = {
+      timeout = 3; # seconds the menu waits; press any key to stop the timer
+      grub = {
         enable = true;
-        consoleMode = "max"; # highest text resolution, so the menu is sharp
-        editor = false; # no editing kernel parameters from the boot menu
+        efiSupport = true;
+        device = "nodev"; # EFI install, nothing written to a disk MBR
         configurationLimit = 3; # boot menu entries; older generations stay until garbage collected
+        useOSProber = false;
       };
     };
     tmp.cleanOnBoot = true;
@@ -30,6 +31,9 @@
     # Boot splash: stylix paints it with the theme palette; the logo is the frog
     plymouth.enable = true;
   };
+
+  # GRUB menu: stylix paints it with the palette and the Monocraft font; add the wallpaper behind it
+  stylix.targets.grub.useWallpaper = true;
 
   stylix.targets.plymouth = {
     logo = ../assets/boot-logo.png;
