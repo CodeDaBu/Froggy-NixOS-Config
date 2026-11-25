@@ -19,7 +19,7 @@ machine only adds its own hardware, GPU and monitor settings. Based on
 - **Lock screen**: hyprlock in the theme colors (`Super + Ctrl + L`), and hypridle locks after 10 minutes idle and before suspend.
 - **Fuzzel** launcher, clipboard history, swaync notifications, hyprshot screenshots.
 - **Terminal**: Ghostty, zsh with starship, eza, zoxide and a themed fastfetch.
-- **Boot**: systemd-boot with a short menu (3 entries, no parameter editing) and a Plymouth splash in the theme colors with the frog logo.
+- **Boot**: GRUB (EFI) themed with the palette, Monocraft font and wallpaper (3 entries), then a Plymouth splash in the theme colors with the frog logo.
 - **Signal** always from a newer nixpkgs (old Signal Desktop versions expire).
 - **Same system on every PC**: shared modules in `hosts/common`, one small folder per machine, and `scripts/new-host.sh` to set up a fresh install (see below).
 
@@ -53,7 +53,7 @@ machine only adds its own hardware, GPU and monitor settings. Based on
 
 ## Install on a new PC
 
-1. Install NixOS normally (create your user during the installer, UEFI/systemd-boot).
+1. Install NixOS normally (create your user during the installer, UEFI).
 2. Clone this repo and create a host for the machine:
 
    ```sh

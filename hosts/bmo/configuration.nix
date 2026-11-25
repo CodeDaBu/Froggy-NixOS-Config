@@ -8,6 +8,21 @@
     ./variables.nix
   ];
 
+  # Dual boot: Windows keeps its boot files on this machine's EFI partition (/boot, UUID CEBA-E70A).
+  # The entry only shows up if the file is really there.
+  boot.loader.grub.extraEntries = ''
+    search --fs-uuid --no-floppy --set=winroot CEBA-E70A
+    if [ -f ($winroot)/EFI/Microsoft/Boot/bootmgfw.efi ]; then
+      menuentry "Windows" --class windows --class os {
+        insmod part_gpt
+        insmod fat
+        insmod chain
+        search --fs-uuid --no-floppy --set=root CEBA-E70A
+        chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+      }
+    fi
+  '';
+
   # USBGuard rules for this laptop (only active if nixos/usbguard.nix is imported)
   services.usbguard.rules = ''
     allow id 1d6b:0002 serial "0000:05:00.3" name "xHCI Host Controller" hash "4a4NgfdUaJO43rkCzmWRSeHHR/uUh5+SNsXnhosm9qs=" parent-hash "ldMchY4Tt4GPUYo30eNGvai+Fs/EdnVY3vMyxJUq4Nk=" with-interface 09:00:00 with-connect-type ""
