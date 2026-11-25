@@ -1,4 +1,4 @@
-{config, ...}: {
+{...}: {
   imports = [
     ../common/home.nix
     ./variables.nix # Mostly user-specific configuration

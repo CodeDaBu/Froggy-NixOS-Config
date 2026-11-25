@@ -14,7 +14,7 @@
         {
           nixpkgs.overlays = [
             # signal-desktop from a newer nixpkgs, old versions expire
-            (final: prev: {
+            (_final: prev: {
               signal-desktop =
                 (import inputs.nixpkgs-signal {
                   system = prev.stdenv.hostPlatform.system;

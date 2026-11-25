@@ -5,7 +5,7 @@
   ...
 }: {
   home.packages = import ./cybersecurity-packages.nix {
-    inherit pkgs pkgs-stable pkgs-nur-hadi;
+    inherit pkgs-stable pkgs-nur-hadi;
   };
 
   systemd.user.tmpfiles.rules = [

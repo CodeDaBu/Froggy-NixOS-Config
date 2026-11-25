@@ -8,7 +8,6 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     stylix.url = "github:danth/stylix";
-    sops-nix.url = "github:Mic92/sops-nix";
     nvf.url = "github:notashelf/nvf";
     notashelf-tuigreet.url = "github:NotAShelf/tuigreet";
     helium-browser.url = "github:oxcl/nix-flake-helium-browser";
@@ -26,7 +25,6 @@
 
   outputs = inputs @ {
     nixpkgs,
-    nixpkgs-stable,
     ...
   }: let
     system = "x86_64-linux";
@@ -38,15 +36,11 @@
         system
         pkgs
         ;
-      pkgs-stable = nixpkgs-stable.legacyPackages.${system};
-      pkgs-nur-hadi = inputs.nur-anotherhadi.packages.${system};
     };
     merge = nixpkgs.lib.foldl nixpkgs.lib.recursiveUpdate {};
   in
     merge [
-      (import ./home/programs/nvf/flake.nix args)
-      (import ./home/programs/group/flake.nix args)
-      (import ./home/programs/nixy/flake.nix args)
+      (import ./home/programs/froggy/flake.nix args)
       {
         formatter.${system} = pkgs.alejandra;
         # Every folder in hosts/ with a flake.nix is a host (folders starting with _ are templates)

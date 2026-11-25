@@ -3,12 +3,12 @@
   system,
   ...
 }: {
-  packages.${system}.nixy = import ./package.nix {
+  packages.${system}.froggy = import ./package.nix {
     inherit pkgs;
     configDirectory = "$HOME/.config/nixos";
   };
 
-  homeManagerModules.nixy = {
+  homeManagerModules.froggy = {
     imports = [./default.nix];
   };
 }

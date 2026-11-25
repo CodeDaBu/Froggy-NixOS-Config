@@ -118,7 +118,6 @@ in {
     unzip
     optipng
     jpegoptim
-    pfetch
     btop
     unrar
     p7zip
